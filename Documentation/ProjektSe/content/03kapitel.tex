@@ -1,0 +1,43 @@
+\chapter{Reflektion}
+\section{Herausforderungen und Lösungen}
+\subsection*{Synchronisation der Kollisionen}
+\textbf{Problem:} Bei zwei offenen Tabs waren Crashes nicht synchron (bei einem Spieler „knapp vorbei“, beim anderen „voll drin“). \\
+\textbf{Ursache:} Jeder Client prüfte lokal Kollisionen/Out-of-Bounds und hatte leicht unterschiedliche Arena-Bounds, FPS, RNG-Sequenzen.\\
+\textbf{Lösung:} Nur der Host prüft Kollisionen auf seinem Spiel und beendet die Runde, bei einer Kollision. \\
+Clients bekommen das Ergebnis vom Host mitgeteilt und beenden ihre Runde, egal ob sie lokal eine Kollision hatten oder nicht.\\
+\textbf{Anmerkung:} Kann zwar zu Asynchronität führen, ist im Rahmen des Projekts aber vertretbar (Selbst große Spiele haben diese Synchronisationsprobleme).
+
+\subsection*{Spieleranzahl-Übertragung}
+\textbf{Problem:} Spieleranzahl wurde nicht im Frontend oder nur beim festgelegten "Dev"-Server angezeigt.\\
+\textbf{Ursache:} Der GameServer wusste nicht auf welchem Port er läuft und konnte somit nicht die Spieleranzahl an den Masterserver übertragen. Somit hat er die Spielerzahl immer nur für den festgelegten Port des "Dev"-Servers übertragen.\\
+\textbf{Lösung:} Der wichtigste Aspekt war die Differenzierung zwischen Internal- und Public-Port. Intern kann immer auf dem "Dev"-Port (standard) kommuniziert werden der Public-Port musste jedoch vom Masterserver identifiziert und für die spielerzahl festegelegt werden. \\
+
+\subsection*{Username-Übergabe an Godot}
+\textbf{Problem:} Der Username wird im Frontend erstellt und in der Datenbank gespeichert, jedoch nicht direkt an Godot übergeben.\\
+\textbf{Ursache:} Godot hat keinen direkten Zugriff auf die Datenbank und fragt bei der Authentifizierung mit dem Token nur den Login-Service ab.\\
+\textbf{Lösung:} Der Username wird in der URL (so wie der Auth-Token) als Query-Parameter übergeben und von Godot ausgelesen.\\
+\textbf{Anmerkung:} Dabei war das ganze vorerst nicht trivial. Das Auslesen und Weiterverarbeiten von Query-Parametern in der Engine musste zunächst manuell implementiert werden.
+
+
+\section{Mögliche Alternativen}
+\subsection*{Synchronisation der Kollisionen}
+Anstatt ein großes Spielfeld mit "auf Pixeln" basierter Kollisionsprüfung zu verwenden, könnte man das Spielfeld in ein Raster aufteilen und die Positionen der Spieler auf die Rasterzellen beschränken.
+-> Räumliche Indexierung (z. B. Grid/Quadtree) für die Trails und Köpfe der einzelnen Spieler.
+
+\subsection*{Spawnpositionen}
+Derzeit werden die Spawnpositionen der Spieler zufällig gewählt, was zu unfairen Startbedingungen führen kann (z. B. wenn Spieler zu nah beieinander spawnen oder sehr nah am Rand). 
+Dies war jedoch eine bewusste Designentscheidung, um das Spiel dynamisch und spannend zu gestalten.
+Als Alternative wären auch vordefinierte Spawnpunkte denkbar, die strategisch über das Spielfeld verteilt sind, welche zu einem faireren Start führen würden, auf Kosten der Spannung.  
+
+\section{Lessons Learned}
+\subsection*{Login mit PostgreSQL und JWT}
+Die Implementierung eines des Logins mit PostgreSQL und JWT war mit erstaunlich wenig Einarbeitungszeit verbunden und hat sich als sehr effektiv erwiesen.
+Die Gruppenmitglieder hatten zuvor hiermit noch nicht gearbeitet, sind aber positiv überrascht und werden diese Erkenntnis in zukünftigen Projekten anwenden.
+
+\subsection*{Datencache mit Redis}
+Auch hiermit hatten die Gruppenmitglieder zuvor noch nicht gearbeitet und waren positiv überrascht, wie einfach und effektiv die Implementierung eines Datencaches mit Redis war.
+
+\subsection*{Godot Engine}
+Die Godot Engine war für alle Gruppenmitglieder neu und die Einarbeitung hat verhältnismäsig viel Zeit (im Vergleich zu anderen neu-erlernten Technologien) in Anspruch genommen.
+Auch die Arbeit nach der Einarbeitung war teilweise etwas umständlich und ging eher schleppend voran. 
+Die Komplexität und Größe des Codes und Architektur in Godot wurde zu Beginn stark unterschätzt.

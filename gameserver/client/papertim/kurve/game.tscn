@@ -1,0 +1,114 @@
+[gd_scene load_steps=4 format=3 uid="uid://dmayfmv3ifkc3"]
+
+[ext_resource type="PackedScene" uid="uid://cwfoqyyxdscwg" path="res://kurve/player.tscn" id="1"]
+[ext_resource type="Script" uid="uid://3kdsn02oq8os" path="res://kurve/game.gd" id="2"]
+
+[sub_resource type="RectangleShape2D" id="4"]
+size = Vector2(1500, 1000)
+
+[node name="Game" type="Node2D"]
+script = ExtResource("2")
+player_packed = ExtResource("1")
+spawn_bounds_x = Vector2(100, 1800)
+spawn_bounds_y = Vector2(80, 1000)
+use_viewport_bounds = true
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/Control"]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="ExitInstructions" type="Label" parent="UI/Control/VBoxContainer"]
+layout_mode = 2
+text = "Press escape to exit"
+horizontal_alignment = 1
+uppercase = true
+
+[node name="FPSCounter" type="Label" parent="UI/Control/VBoxContainer"]
+layout_mode = 2
+text = "60"
+
+[node name="LabelBlue" type="Label" parent="UI/Control/VBoxContainer"]
+layout_mode = 2
+text = "BLUE: 0"
+vertical_alignment = 1
+
+[node name="LabelOrange" type="Label" parent="UI/Control/VBoxContainer"]
+layout_mode = 2
+text = "ORANGE: 0"
+vertical_alignment = 1
+
+[node name="LabelGreen" type="Label" parent="UI/Control/VBoxContainer"]
+layout_mode = 2
+text = "GREEN: 0"
+vertical_alignment = 1
+
+[node name="LabelPurple" type="Label" parent="UI/Control/VBoxContainer"]
+layout_mode = 2
+text = "PURPLE: 0	"
+vertical_alignment = 1
+
+[node name="LabelRoundOver" type="Label" parent="UI/Control/VBoxContainer"]
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ReadyPanel" type="PanelContainer" parent="UI/Control/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Body" type="VBoxContainer" parent="UI/Control/VBoxContainer/ReadyPanel"]
+layout_mode = 2
+
+[node name="ReadyButton" type="CheckButton" parent="UI/Control/VBoxContainer/ReadyPanel/Body"]
+layout_mode = 2
+
+[node name="YouLabel" type="Label" parent="UI/Control/VBoxContainer/ReadyPanel/Body"]
+layout_mode = 2
+
+[node name="ReadyList" type="VBoxContainer" parent="UI/Control/VBoxContainer/ReadyPanel/Body"]
+layout_mode = 2
+
+[node name="RoundStartTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="RoundOverTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Arena" type="Node2D" parent="."]
+
+[node name="Walls" type="Area2D" parent="Arena" groups=["Wall"]]
+collision_layer = 2
+priority = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Arena/Walls"]
+position = Vector2(500, 360)
+shape = SubResource("4")
+
+[node name="West" type="Line2D" parent="Arena"]
+
+[node name="North" type="Line2D" parent="Arena"]
+
+[node name="South" type="Line2D" parent="Arena"]
+
+[node name="East" type="Line2D" parent="Arena"]
+
+[connection signal="timeout" from="RoundStartTimer" to="." method="_on_RoundStartTimer_timeout"]
+[connection signal="timeout" from="RoundOverTimer" to="." method="_on_RoundOverTimer_timeout"]
+[connection signal="area_exited" from="Arena/Walls" to="." method="_on_walls_area_exited"]
+[connection signal="area_exited" from="Arena/Walls" to="." method="_on_Walls_area_exited"]

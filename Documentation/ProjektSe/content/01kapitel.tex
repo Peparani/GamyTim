@@ -1,0 +1,17 @@
+\chapter{Einleitung}
+\label{cha:einleitung}
+
+Im Rahmen des Moduls „Verteilte Systeme“ haben wir gemeinsam ein Netzwerkspiel auf Basis des Klassikers „Achtung, Kurve!“ entwickelt. Ziel des Projekts war es, die Prinzipien verteilter Systeme praktisch umzusetzen und die Interaktion mehrerer Clients über einen zentralen Server zu ermöglichen.
+
+\section{Projektüberblick}
+
+Die Umsetzung erfolgte in Godot als Game Engine, ergänzt durch verschiedene Backend-Komponenten zur Verwaltung von Spielern, Lobbys und Spielzuständen. Dabei kamen unter anderem eine User-Datenbank, ein Redis-Server für schnelle Synchronisation, sowie ein Masterserver und ein Loadbalancer für die Organisation und Skalierung der Spielinstanzen zum Einsatz.
+
+Die Architektur wurde so entworfen, dass sie eine saubere Trennung zwischen Frontend, Spiel-Logik und Backend-Systemen ermöglicht. Eine genauere Beschreibung der einzelnen Komponenten und deren Zusammenspiel erfolgt in den folgenden Kapiteln.
+
+\section{Ziele und Motivation}
+
+Dabei stand nicht nur der Spielspaß im Vordergrund, sondern insbesondere das praktische Verständnis von Konzepten wie:
+Lastverteilung durch einen Loadbalancer, Zentrale Verwaltung von Lobbys und Spielzuständen über einen Masterserver, Persistente Datenspeicherung in Datenbanken, Skalierbarkeit durch die Nutzung mehrerer Game-Server und Redis für schnelle Synchronisation.
+
+Die Motivation war also, ein praxisnahes Beispiel zu schaffen, bei dem die theoretischen Inhalte aus der Vorlesung in einem realen Projekt erlebbar werden. Durch die Umsetzung in Godot konnte zusätzlich die Anbindung einer Game Engine an ein verteiltes Backend erprobt werden.

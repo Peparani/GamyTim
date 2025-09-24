@@ -1,0 +1,76 @@
+name: papertim
+
+networks:
+  gamenet:
+    name: gamenet
+
+services:
+  redis:
+    image: redis:7
+    networks: [gamenet]
+    ports: ["6379:6379"]
+
+  postgres:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=papertim
+      - POSTGRES_USER=${GAMYUSER}
+      - POSTGRES_PASSWORD=${GAMYPW}
+    ports: ["5432:5432"]
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+      - ./masterserver/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks: [gamenet]
+
+  masterserver:
+    build: ./masterserver
+    networks: [gamenet]
+    environment:
+      - DOCKER_NETWORK=gamenet
+      - COMPOSE_PROJECT_NAME=papertim
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/papertim
+      - JWT_SECRET=change_this_dev_secret
+      - MASTER_API_KEY=change_me_devkey
+    expose:
+      - "3000"
+    depends_on: [redis, postgres]
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      
+  frontendlobby:
+    build: { context: ./frontend }
+    networks: [gamenet]
+    ports: ["8081:8081"]
+    depends_on: [masterserver]
+
+  # optional: statischer Dev-Gameserver
+  gameserver:
+    build: ./gameserver
+    image: gameserver:latest
+    networks: [gamenet]
+    container_name: gameserver
+    ports: ["8443:8443"]
+    depends_on: [redis, masterserver]
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - masterserver
+    networks:
+      - gamenet
+
+  adminer:
+      image: adminer:latest
+      container_name: adminer
+      restart: unless-stopped
+      ports: 
+        - "8082:8080"
+      environment:
+        ADMINER_DEFAULT_SERVER: postgres
+      depends_on: 
+        - postgres
+      networks: [gamenet]
