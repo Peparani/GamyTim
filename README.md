@@ -71,7 +71,7 @@ Spieler verbinden sich über WebSockets mit einem Game-Server, steuern ihre „K
    ```
    -> für hochverfügbaren Masterserver Flag: --scale masterserver=3 (oder mehr)
    
-   Danach sollte die Lobby erreichbar sein unter: `https://localhost:8081/`
+   Danach sollte die Lobby erreichbar sein unter: `https://213.153.88.123:8081/`
 ---
 
 ## Benutzung

@@ -42,6 +42,6 @@ testem.log
 Thumbs.db
 
 node_modules/
-localhost.pem
-localhost-key.pem
+213.153.88.123.pem
+213.153.88.123-key.pem
 package-lock.json
