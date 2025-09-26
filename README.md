@@ -1,4 +1,4 @@
-# PaperTim
+# GamyTim
 
 Ein Projekt für das Modul *Verteilte Systeme*: Ein browserbasiertes Mehrspieler-Spiel (inspiriert von „Achtung, Kurve!“), umgesetzt mit Godot, Node.js und WebSockets.
 
