@@ -72,7 +72,18 @@ Spieler verbinden sich über WebSockets mit einem Game-Server, steuern ihre „K
    -> für hochverfügbaren Masterserver Flag: --scale masterserver=3 (oder mehr)
    
    Danach sollte die Lobby erreichbar sein unter: `https://localhost:8081/`
----
+   
+   **Hinweis – Frontend-Build:** <br>
+   Beim ersten Build kann der Schritt `npm install` im Frontend-Container (`frontendlobby`) sehr lange dauern.  
+   Falls das passiert, sollten die Dependencies manuell lokal installiert werden, bevor `docker compose up` ausführt wird:
+   
+   ```bash
+   cd frontend
+   npm install
+   ```
+   Danach läuft der Docker-Build in der Regel deutlich schneller durch.
+
+   ---
 
 ## Benutzung
 
